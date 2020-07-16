@@ -1,0 +1,42 @@
+<html>
+   <head>
+      <meta charset="utf-8" />
+      <title>Noa Chat</title>
+   </head>
+
+   <body>
+      <center>
+         <h3>Noa Chat</h3>
+      <div>
+         <input placeholder="your name" id="name" type="text">
+      </div>
+      <div>
+         <input placeholder="say something" id="text" type="text">
+         <input value="send" id="sendbutton" type="button" onClick="Send()">
+      </div>
+         <div id="chat"></div>
+      </center>
+   </body>
+
+   <script>
+   let url = "ws://" + window.location.host + "/ws";
+   let ws = new WebSocket(url);
+
+   let chat = document.getElementById("chat");
+   let  text = document.getElementById("text");
+   let name = document.getElementById("name");
+   let button = document.getElementById("button");
+
+   ws.onmessage = function (msg) {
+      var line = msg.data + "\n";
+      chat.innerText = line + chat.innerText;
+   };
+
+   function Send() {
+      if (text.value !== "") {
+         ws.send(name.value + ": " + text.value);
+         text.value = "";
+      }
+   }
+   </script>
+</html>
