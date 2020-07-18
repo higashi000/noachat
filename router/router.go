@@ -1,6 +1,8 @@
 package router
 
 import (
+	"fmt"
+	"log"
 	"net/http"
 
 	"github.com/labstack/echo"
@@ -11,6 +13,10 @@ import (
 type NoaChat struct {
 	M *melody.Melody
 	E *echo.Echo
+}
+
+type Msg struct {
+	Text string `json:"text"`
 }
 
 func NewRouter() NoaChat {
@@ -30,6 +36,19 @@ func NewRouter() NoaChat {
 
 	noachat.E.GET("/ws", func(c echo.Context) error {
 		noachat.M.HandleRequest(c.Response().Writer, c.Request())
+
+		return nil
+	})
+
+	noachat.E.POST("/send", func(c echo.Context) error {
+		var msg Msg
+		err := c.Bind(&msg)
+		if err != nil {
+			log.Println(err)
+		}
+		fmt.Println(msg.Text)
+
+		noachat.M.Broadcast([]byte(msg.Text))
 
 		return nil
 	})
