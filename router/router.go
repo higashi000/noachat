@@ -1,9 +1,9 @@
 package router
 
 import (
-	"fmt"
-	"log"
 	"net/http"
+
+	"github.com/pkg/errors"
 
 	"github.com/labstack/echo"
 	"github.com/labstack/echo/middleware"
@@ -20,6 +20,8 @@ type Msg struct {
 }
 
 func NewRouter() NoaChat {
+	var msg *Msg
+
 	noachat := NoaChat{
 		M: melody.New(),
 		E: echo.New(),
@@ -41,12 +43,10 @@ func NewRouter() NoaChat {
 	})
 
 	noachat.E.POST("/send", func(c echo.Context) error {
-		var msg Msg
-		err := c.Bind(&msg)
+		err := c.Bind(msg)
 		if err != nil {
-			log.Println(err)
+			return errors.Wrap(err, "failed bind msg")
 		}
-		fmt.Println(msg.Text)
 
 		noachat.M.Broadcast([]byte(msg.Text))
 
