@@ -20,7 +20,6 @@ type Msg struct {
 }
 
 func NewRouter() NoaChat {
-	var msg *Msg
 
 	noachat := NoaChat{
 		M: melody.New(),
@@ -43,6 +42,7 @@ func NewRouter() NoaChat {
 	})
 
 	noachat.E.POST("/send", func(c echo.Context) error {
+		var msg *Msg
 		err := c.Bind(msg)
 		if err != nil {
 			return errors.Wrap(err, "failed bind msg")
