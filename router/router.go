@@ -41,21 +41,25 @@ func NewRouter() NoaChat {
 		return nil
 	})
 
-	noachat.E.POST("/send", func(c echo.Context) error {
-		var msg *Msg
-		err := c.Bind(msg)
-		if err != nil {
-			return errors.Wrap(err, "failed bind msg")
-		}
-
-		noachat.M.Broadcast([]byte(msg.Text))
-
-		return nil
-	})
+	noachat.E.POST("/send", noachat.Send)
 
 	noachat.M.HandleMessage(func(s *melody.Session, msg []byte) {
 		noachat.M.Broadcast(msg)
 	})
 
 	return noachat
+}
+
+func (noachat *NoaChat) Send(c echo.Context) error {
+	var msg Msg
+	err := c.Bind(&msg)
+
+	if err != nil {
+		return errors.Wrap(err, "failed bind msg")
+	}
+
+	noachat.M.Broadcast([]byte(msg.Text))
+
+	c.JSON(http.StatusCreated, msg)
+	return nil
 }
