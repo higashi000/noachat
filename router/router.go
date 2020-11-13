@@ -55,6 +55,7 @@ func (noachat *NoaChat) Send(c echo.Context) error {
 	err := c.Bind(&msg)
 
 	if err != nil {
+		c.JSON(http.StatusInternalServerError, `{"status": "failed bind msg"}`)
 		return errors.Wrap(err, "failed bind msg")
 	}
 
