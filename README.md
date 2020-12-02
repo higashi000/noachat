@@ -1,7 +1,7 @@
 # noachat
 
 ## Description
-This is chat server for noachat.nvim.<br>
+This is chat server for [noachat.nvim](https://github.com/higashi000/noachat.nvim).<br>
 
 ## Usage
 ```
