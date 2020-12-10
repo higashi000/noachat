@@ -7,5 +7,5 @@ import (
 func main() {
 	noachat := router.NewRouter()
 
-	noachat.E.Logger.Fatal(noachat.E.Start(":5000"))
+	noachat.Logger.Fatal(noachat.Start(":5000"))
 }
