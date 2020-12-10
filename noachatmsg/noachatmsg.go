@@ -1,6 +1,7 @@
 package noachatmsg
 
 import (
+	"fmt"
 	"net/http"
 
 	"github.com/higashi000/noachat/checkmsg"
@@ -33,7 +34,9 @@ func Send(c echo.Context) error {
 		return errors.Wrap(err, "failed bind msg")
 	}
 
-	if checkmsg.CheckExclusionWord("ngwords.txt", msg.Text) != nil {
+	fmt.Println(checkmsg.CheckExclusionWord("ngword.txt", msg.Text))
+
+	if checkmsg.CheckExclusionWord("./ngword.txt", msg.Text) != nil {
 		return c.JSON(http.StatusBadRequest, `{"status":""}`)
 	}
 
