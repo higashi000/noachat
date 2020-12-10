@@ -25,7 +25,7 @@ func CheckExclusionWord(fn, txt string) error {
 	}
 
 	for _, e := range exclusionWords {
-		if strings.Index(txt, e) == 0 {
+		if strings.Index(txt, e) != -1 {
 			return existsExclusionWord
 		}
 	}
