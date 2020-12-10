@@ -20,7 +20,7 @@ func TestSend(t *testing.T) {
 
 	rec := httptest.NewRecorder()
 
-	router.E.ServeHTTP(rec, req)
+	router.ServeHTTP(rec, req)
 
 	assert.Equal(t, http.StatusCreated, rec.Code)
 	assert.JSONEq(t, msgData, rec.Body.String())
