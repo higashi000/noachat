@@ -42,6 +42,12 @@ func NewRouter() NoaChat {
 		return nil
 	})
 
+	noachat.E.GET("/favicon", func(c echo.Context) error {
+		http.ServeFile(c.Response().Writer, c.Request(), "img/favicon.ico")
+
+		return nil
+	})
+
 	noachat.E.GET("/ws", func(c echo.Context) error {
 		noachat.M.HandleRequest(c.Response().Writer, c.Request())
 
