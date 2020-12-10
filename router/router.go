@@ -9,10 +9,6 @@ import (
 	"github.com/labstack/echo/middleware"
 )
 
-type Msg struct {
-	Text string `json:"text"`
-}
-
 func NewRouter() *echo.Echo {
 
 	e := echo.New()
