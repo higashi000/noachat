@@ -3,6 +3,7 @@ package router
 import (
 	"net/http"
 
+	"github.com/higashi000/noachat/checkmsg"
 	"github.com/pkg/errors"
 
 	"github.com/labstack/echo"
@@ -44,7 +45,9 @@ func NewRouter() NoaChat {
 	noachat.E.POST("/send", noachat.Send)
 
 	noachat.M.HandleMessage(func(s *melody.Session, msg []byte) {
-		noachat.M.Broadcast(msg)
+		if checkmsg.CheckExclusionWord("./ngword.txt", string(msg)) == nil {
+			noachat.M.Broadcast(msg)
+		}
 	})
 
 	return noachat
@@ -57,6 +60,10 @@ func (noachat *NoaChat) Send(c echo.Context) error {
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, `{"status": "failed bind msg"}`)
 		return errors.Wrap(err, "failed bind msg")
+	}
+
+	if checkmsg.CheckExclusionWord("../checkmsg/testdata/testExclusion1.txt", msg.Text) != nil {
+		return c.JSON(http.StatusBadRequest, `{"status": ""}`)
 	}
 
 	noachat.M.Broadcast([]byte(msg.Text))
