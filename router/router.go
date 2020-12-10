@@ -36,6 +36,12 @@ func NewRouter() NoaChat {
 		return nil
 	})
 
+	noachat.E.GET("/js", func(c echo.Context) error {
+		http.ServeFile(c.Response().Writer, c.Request(), "index.js")
+
+		return nil
+	})
+
 	noachat.E.GET("/ws", func(c echo.Context) error {
 		noachat.M.HandleRequest(c.Response().Writer, c.Request())
 
