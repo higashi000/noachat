@@ -8,7 +8,7 @@ import (
 
 func SetFileServe(e *echo.Echo) {
 
-	e.GET("/", func(c echo.Context) error {
+	e.GET("/channel/:roomid", func(c echo.Context) error {
 		http.ServeFile(c.Response().Writer, c.Request(), "index.html")
 
 		return nil

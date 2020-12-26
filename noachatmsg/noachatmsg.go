@@ -3,6 +3,7 @@ package noachatmsg
 import (
 	"fmt"
 	"net/http"
+	"strings"
 
 	"github.com/higashi000/noachat/checkmsg"
 	"github.com/higashi000/noachat/ws"
@@ -12,7 +13,7 @@ import (
 )
 
 func InitWebSocketSettings(e *echo.Echo) {
-	e.GET("/ws", func(c echo.Context) error {
+	e.GET("/channel/:roomid/ws", func(c echo.Context) error {
 		ws.WS.HandleRequest(c.Response().Writer, c.Request())
 
 		return nil
@@ -23,11 +24,14 @@ func InitWebSocketSettings(e *echo.Echo) {
 			ws.WS.Broadcast(msg)
 		}
 	})
+
 }
 
 func Send(c echo.Context) error {
 	var msg Msg
 	err := c.Bind(&msg)
+
+	roomID := c.QueryParam("room")
 
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, `{"status": "failed bind msg"}`)
@@ -41,6 +45,10 @@ func Send(c echo.Context) error {
 	}
 
 	ws.WS.Broadcast([]byte(msg.Text))
+
+	ws.WS.BroadcastFilter([]byte(msg.Text), func(q *melody.Session) bool {
+		return q.Request.URL.Path == strings.Join([]string{"/channel", roomID, "ws"}, "/")
+	})
 
 	c.JSON(http.StatusCreated, msg)
 	return nil

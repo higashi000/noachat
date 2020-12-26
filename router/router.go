@@ -21,7 +21,7 @@ func NewRouter() *echo.Echo {
 	noachatmsg.InitWebSocketSettings(e)
 	noachatclient.SetFileServe(e)
 
-	e.POST("/send", noachatmsg.Send)
+	e.POST("/send/:room", noachatmsg.Send)
 
 	return e
 }
