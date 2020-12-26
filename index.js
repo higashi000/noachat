@@ -1,4 +1,4 @@
-let url = "wss://" + window.location.host + "/ws";
+let url = "wss://" + window.location.host + window.location.pathname + "/ws";
 let ws = new WebSocket(url);
 
 let chat = document.getElementById("chat");
