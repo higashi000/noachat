@@ -1,23 +1,20 @@
+<!DOCTYPE html>
 <html>
     <head>
         <meta charset="utf-8" />
         <link rel="shortcut icon" href="/img/favicon.ico">
-        <title>Noa Chat</title>
+        <title>noachat start page</title>
     </head>
-
     <body>
         <center>
             <h3>Noa Chat</h3>
             <div>
-                <input placeholder="your name" id="name" type="text">
-            </div>
-            <div>
-                <input placeholder="say something" id="text" type="text">
-                <input value="send" id="sendbutton" type="button" onClick="Send()">
+                <input placeholder="roomid" id="roomid" type="text">
+                <input value="send" id="sendbutton" type="button" onClick="MoveChatRoom()">
             </div>
             <div id="chat"></div>
         </center>
     </body>
 
-    <script src="/js"></script>
+    <script src="/indexjs"></script>
 </html>

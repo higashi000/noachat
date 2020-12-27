@@ -7,15 +7,26 @@ import (
 )
 
 func SetFileServe(e *echo.Echo) {
-
-	e.GET("/channel/:roomid", func(c echo.Context) error {
+	e.GET("/", func(c echo.Context) error {
 		http.ServeFile(c.Response().Writer, c.Request(), "index.html")
 
 		return nil
 	})
 
-	e.GET("/js", func(c echo.Context) error {
+	e.GET("/indexjs", func(c echo.Context) error {
 		http.ServeFile(c.Response().Writer, c.Request(), "index.js")
+
+		return nil
+	})
+
+	e.GET("/channel/:roomid", func(c echo.Context) error {
+		http.ServeFile(c.Response().Writer, c.Request(), "chat.html")
+
+		return nil
+	})
+
+	e.GET("/js", func(c echo.Context) error {
+		http.ServeFile(c.Response().Writer, c.Request(), "chat.js")
 
 		return nil
 	})
