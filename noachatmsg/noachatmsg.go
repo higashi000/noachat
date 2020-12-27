@@ -21,7 +21,9 @@ func InitWebSocketSettings(e *echo.Echo) {
 
 	ws.WS.HandleMessage(func(s *melody.Session, msg []byte) {
 		if checkmsg.CheckExclusionWord("./ngword.txt", string(msg)) == nil {
-			ws.WS.Broadcast(msg)
+			ws.WS.BroadcastFilter(msg, func(q *melody.Session) bool {
+				return q.Request.URL.Path == s.Request.URL.Path
+			})
 		}
 	})
 
@@ -31,7 +33,8 @@ func Send(c echo.Context) error {
 	var msg Msg
 	err := c.Bind(&msg)
 
-	roomID := c.QueryParam("room")
+	roomID := c.Param("room")
+	fmt.Println(roomID)
 
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, `{"status": "failed bind msg"}`)
@@ -44,7 +47,7 @@ func Send(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, `{"status":""}`)
 	}
 
-	ws.WS.Broadcast([]byte(msg.Text))
+	//	ws.WS.Broadcast([]byte(msg.Text))
 
 	ws.WS.BroadcastFilter([]byte(msg.Text), func(q *melody.Session) bool {
 		return q.Request.URL.Path == strings.Join([]string{"/channel", roomID, "ws"}, "/")
